@@ -1,9 +1,22 @@
 image: maven:3.3.9
 
-pipelines:
-  default:
-    - step:
+definitions:
+  caches:
+    sonar: ~/.sonar/cache
+  steps:
+    - step: &build-test-sonarcloud
+        name: Build, test and analyze on SonarCloud
         caches:
           - maven
+          - sonar
         script:
-          - mvn -B verify
+          - mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -Dsonar.projectKey=sonarsource_sample-maven-project -Dsonar.organization=sonarsource-bitbucket
+        artifacts:
+          - target/**
+          
+pipelines:
+  default:
+    - step: *build-test-sonarcloud
+  pull-requests:
+    '**':
+      - step: *build-test-sonarcloud
