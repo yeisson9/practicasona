@@ -13,7 +13,7 @@ definitions:
           - maven
           - sonar
         script:
-          - mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -Dsonar.projectKey=sonarsource_sample-maven-project -Dsonar.organization=sonarsource-bitbucket
+          - mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
         artifacts:
           - target/**
           
