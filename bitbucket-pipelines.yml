@@ -16,10 +16,20 @@ definitions:
           - mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
         artifacts:
           - target/**
-          
+    - step: &build-test
+        name: Build and test
+        caches:
+          - maven
+        script:
+          - mvn -B verify
+        artifacts:
+          - target/**
 pipelines:
   default:
-    - step: *build-test-sonarcloud
+    - step: *build-test
+  branches:
+    master:
+      - step: *build-test-sonarcloud
   pull-requests:
     '**':
       - step: *build-test-sonarcloud
